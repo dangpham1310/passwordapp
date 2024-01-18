@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:password_app/Demo.dart';
 import 'dart:convert';
 import 'addPassword.dart';
 
 void main() {
   runApp(
     MaterialApp(
-      home: Home(),
+      home: PassGeneration(),
     ),
   );
 }

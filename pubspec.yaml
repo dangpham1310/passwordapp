@@ -48,7 +48,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   flutter_swipe_action_cell: any
-  flutter_cupertino_date_picker: ^0.0.4
+
 
 
 # For information on the generic Dart part of this file, see the
