@@ -85,9 +85,12 @@ class _PassGenerationState extends State<PassGeneration> {
                   onChanged: (value) {
                     setState(() {
                       powerOn = value;
-                      if (powerOn) {
+                      if (powerOn) 
+                      {
                         print('Switch turned ON');
-                      } else {
+                      } 
+                      else 
+                      {
                         print('Switch turned OFF');
                       }
                     });
