@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:password_app/addPassword.dart';
-import 'package:password_app/main.dart';
+import 'package:flutter/services.dart';
+
 
 class PassGeneration extends StatefulWidget {
   const PassGeneration({Key? key}) : super(key: key);
@@ -13,85 +13,124 @@ class PassGeneration extends StatefulWidget {
 }
 
 class _PassGenerationState extends State<PassGeneration> {
-  bool powerOn = false;
+  bool powerOn1 = false;
+
+  bool powerOn2 = false;
+
+  double sliderValue = 6.0; // Default length
+
   TextEditingController lengthController = TextEditingController();
 
-  String line1Text = 'Line 1';
+  String linerandomText = '';
+
+  String line1Text = 'Length (6 - 32): 6';
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
+      
+      //Thanh tiêu đề 
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          color: Colors.white,
-          iconSize: 30,
-          tooltip: 'Close Icon',
-          onPressed: () {},
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.check),
-            color: Colors.white,
-            iconSize: 30,
-            tooltip: 'Check Icon',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddScreen(),
-                ),
-              );
-            },
-          ),
-        ],
+        backgroundColor: Colors.white,
+        // leading: IconButton(
+        //   icon: const Icon(Icons.close),
+        //   color: Colors.white,
+        //   iconSize: 30,
+        //   tooltip: 'Close Icon',
+        //   onPressed: () {},
+        // ),
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.check),
+        //     color: Colors.white,
+        //     iconSize: 30,
+        //     tooltip: 'Check Icon',
+        //     onPressed: () {
+        //       Navigator.push(
+        //         context,
+        //         MaterialPageRoute(
+        //           builder: (context) => AddScreen(),
+        //         ),
+        //       );
+        //     },
+        //   ),
+        // ],
         centerTitle: true,
         title: Text(
-          "Password",
+          "Tools",
           style: TextStyle(
-            fontSize: 22.0,
+            fontSize: 30,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Colors.black,
           ),
         ),
       ),
+
+      // Phần Body
       body: Container(
-        color: Colors.black,
+        color: Colors.white,
         padding: EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+
+          // Hàng thứ nhất
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               line1Text,
               style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
+                color: Colors.black,
+                fontSize: 25,
                 fontWeight: FontWeight.bold,
               ),
             ),
             SizedBox(height: 20.0),
+
+          // Hàng thứ hai
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Slider(
+                    value: sliderValue,
+                    min: 6,
+                    max: 32,
+                    onChanged: (value) {
+                      setState(() {
+                        sliderValue = value;
+                        line1Text = 'Length (6 - 32): ${sliderValue.toInt()}';
+                      });
+                    },
+                    activeColor: Colors.red, // Set the desired color
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20.0),
+
+
+          // Hàng thứ ba
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Memorizable',
-                  style: TextStyle(color: Colors.white, fontSize: 30),
+                  'Avoid Ambiguous',
+                  style: TextStyle(color: Colors.black, fontSize: 30),
                 ),
                 SizedBox(height: 20.0),
                 CupertinoSwitch(
-                  value: powerOn,
+                  value: powerOn1,
                   onChanged: (value) {
                     setState(() {
-                      powerOn = value;
-                      if (powerOn) 
+                      powerOn1 = value;
+                      if (powerOn1) 
                       {
-                        print('Switch turned ON');
+                        print('Switch 1 turned ON');
                       } 
                       else 
                       {
-                        print('Switch turned OFF');
+                        print('Switch 1 turned OFF');
                       }
                     });
                   },
@@ -100,16 +139,70 @@ class _PassGenerationState extends State<PassGeneration> {
               ],
             ),
             SizedBox(height: 20.0),
-            TextField(
-              controller: lengthController,
-              style: TextStyle(color: Colors.white), // Set the text color
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'LENGTH',
-                labelStyle: TextStyle(color: Colors.white), // Set the label color
-              ),
+
+          // Hàng thứ tư
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Special Characters',
+                  style: TextStyle(color: Colors.black, fontSize: 30),
+                ),
+                SizedBox(height: 20.0),
+                CupertinoSwitch(
+                  value: powerOn2,
+                  onChanged: (value) {
+                    setState(() {
+                      powerOn2 = value;
+                      if (powerOn2) 
+                      {
+                        print('Switch 2 turned ON');
+                      } 
+                      else 
+                      {
+                        print('Switch 2 turned OFF');
+                      }
+                    });
+                  },
+                  activeColor: Colors.blueGrey,
+                ),
+              ],
             ),
             SizedBox(height: 20.0),
+
+          // Hàng thứ năm
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    linerandomText,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.content_copy,
+                    color: Colors.blue,
+                  ),    
+                  onPressed: () {
+                    copyToClipboard(linerandomText);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                      content: Text('Text copied to clipboard'),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 20.0),
+
+          // Hàng thứ sáu
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -121,17 +214,17 @@ class _PassGenerationState extends State<PassGeneration> {
                     regeneratePassword();
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                      borderRadius: BorderRadius.circular(30.0),
+                      side: BorderSide(color: Colors.blueAccent, width: 2.0), // Border color and width
                     ),
-                    primary: Colors.grey, // Background color
-                    onPrimary: Colors.white, // Text color
+                    primary: Colors.white, // Transparent background color
                   ),
                   child: Text(
-                    'Regenerate Password',
+                    'Generate Password',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.blueAccent,
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
                     ),
@@ -147,13 +240,18 @@ class _PassGenerationState extends State<PassGeneration> {
     );
   }
 
+  void copyToClipboard(String text) {
+    Clipboard.setData(ClipboardData(text: text));
+  }
+
+
   void regeneratePassword() 
   {
     // Get the length entered by the user
     int passwordLength = int.tryParse(lengthController.text) ?? 0;
 
     // Generate a random password
-    String newPassword = generateRandomPassword(passwordLength);
+    String newPassword = generateRandomPassword(sliderValue.toInt());
 
     // Now you can use the newPassword variable or incorporate it into your logic
     print('Random Password Generated: $newPassword');
@@ -161,21 +259,42 @@ class _PassGenerationState extends State<PassGeneration> {
     // Update the "Line 1" text
     setState(() 
     {
-      line1Text = newPassword;
+      linerandomText = newPassword;
     });
   }
 
   String generateRandomPassword(int length) 
   {
-    const String validChars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#\$%^&*()_-+=<>?/[]{},.:;|';
+    const String validChars1 = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#\$%^&*()_-+=<>?/[]{},.:;|';
+
+    const String validChars2 = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
 
     final Random random = Random();
     StringBuffer buffer = StringBuffer();
 
-    for (int i = 0; i < length; i++) 
+    if (powerOn2) 
     {
-      int randomIndex = random.nextInt(validChars.length);
-      buffer.write(validChars[randomIndex]);
+      for (int i = 0; i < length; i++) 
+      {
+        int randomIndex = random.nextInt(validChars1.length);
+        buffer.write(validChars1[randomIndex]);
+      }
+    }
+    else if (powerOn1)
+    {
+      for (int i = 0; i < length; i++) 
+      {
+        int randomIndex = random.nextInt(validChars2.length);
+        buffer.write(validChars2[randomIndex]);
+      }
+    }
+    else
+    {
+      for (int i = 0; i < length; i++) 
+      {
+        int randomIndex = random.nextInt(validChars2.length);
+        buffer.write(validChars2[randomIndex]);
+      }
     }
 
     return buffer.toString();
